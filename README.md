@@ -11,14 +11,18 @@ Requirements :
 ## Usage
 
 ```
-usage: chrtme.py [-h] [-v] [-d] [-f] [-r] [-F FORMAT] [-t TMP] [-l LOCATION]
-                 url cmd [cmd ...]
+usage: chrtme.py [-h] [-v] [-d] [-f] [-t TMP] [-l LOCATION] [-r] [-k]
+                 image cmd [cmd ...]
 
 chrtme - chroot me is a management tool for chroot enviroments.
+    
 
 positional arguments:
-  url                   specify url for the image to be downloaded
-  cmd                   Specify the command to run inside the chroot
+  image                 specify the image URL or location. The image should be
+                        a .tar file, possibly compressed with gzip, bzip or xz
+  cmd                   Specify command to be run inside the chroot. If "-"
+                        chars are present use "--" before specifying the
+                        command
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -26,17 +30,14 @@ optional arguments:
   -d, --debug           Enable debugging info
   -f, --force           Force script execution, besides warnings (eg: not
                         running script as root)
-  -r, --rm              *TODO* Remove chroot directory after executing the
-                        task
-  -F FORMAT, --format FORMAT
-                        *TODO* Specify format for the downloded image. Can be
-                        "tar", "tgz"|"tar.gz", "tar.xz", "tar.bz2". Default
-                        "tar"
   -t TMP, --tmp TMP     Specify temp directory to be used during the image
-                        download. Default "/tmp"
+                        download. Default "/tmp/rootfs.tmp"
   -l LOCATION, --location LOCATION
                         Specify the target directory to extract the downloaded
-                        image. Default "./rootfs"
+                        image. Default "./rootfs/"
+  -r, --rm              Remove chroot directory after executing the task
+  -k, --keeptmp         Keep the downloaded image temporary file after the
+                        script exits
 ```
 
 ## Contributing
