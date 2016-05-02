@@ -50,8 +50,8 @@ optional arguments:
 
 ## History
 
-20160501 - 0.0.1 - Initial commit - basic script structure and help message
-20160502 - 0.0.2 - Added basic script functionality
+20160502. 0.0.2 - Added basic script functionality
+20160501. 0.0.1 - Initial commit - basic script structure and help message
 
 ## Credits
 
