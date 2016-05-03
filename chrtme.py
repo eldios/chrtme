@@ -23,7 +23,7 @@ chrtme - chroot me is a management tool for chroot enviroments.
         allow_abbrev = False)
 
     # arguments
-    parser.add_argument('-v','--version', action='version', 
+    parser.add_argument('-v','--version', action='version',
         version="%(prog)s {}\n{}".format(version,author))
     parser.add_argument('-d','--debug', action='store_true',
         help='Enable debugging info')
@@ -76,42 +76,71 @@ def download(image,tmp_dir,debug=False):
     if debug:
         print('Image filename parse to {}'.format(filename))
 
-    abs_path = os.path.join(tmp_dir,filename) 
+    abs_path = os.path.join(tmp_dir,filename)
     if debug:
         print('Image absolute path set to {}'.format(abs_path))
 
     try:
-        if os.stat(image):
+        if os.stat(abs_path):
+            if debug:
+                print('Image {} found locally! Skipping download.'.format(abs_path))
+            return abs_path
+        elif os.stat(image):
             if debug:
                 print('Image {} found locally! Skipping download.'.format(image))
+            return image
     except FileNotFoundError:
         if debug:
-            print('Image {} NOT found!'.format(image))
+            print('Image {} or {} NOT found locally'.format(image,abs_path))
 
-        try:
-            urllib.urlretrieve(image, tmp_file)
-        except:
-            print('Something bad happened during the download')
-
-    return image
+        # downloading file now
+        if url.scheme:
+            # this means it's a real URL
+            try:
+                if debug:
+                    print('Downloading {} to {}'.format(image,abs_path))
+                urllib.request.urlretrieve(url.geturl(),abs_path)
+                return abs_path
+            except:
+                print('Something bad happened during the download')
+                raise
+        else:
+            # this means it's probably a local path
+            if debug:
+                print('NOT Downloading: "{}" seems a local system path.'.format(abs_path))
+            return abs_path
 
 
 # Extract downloaded image
 def extractimage(image, target_location, debug=False):
     """Extract image to specified location"""
-    import tarfile
+    import os,tarfile
 
-    if tarfile.is_tarfile(image):
+    try:
+        if os.stat(target_location):
+            if debug:
+                print('chroot directory {} found locally! Skipping extraction.'.format(target_location))
+            return target_location
+    except FileNotFoundError:
         if debug:
-            print('Image {} is a tarfile'.format(image))
-    else:
-        if debug:
-            print('Image {} is NOT a tarfile'.format(image))
+            print('chroot directory {} NOT found locally'.format(target_location))
 
-    with tarfile.open(image,mode='r') as f:
-        if debug:
-            print('Extracting {} in {}'.format(image,target_location))
-        f.extractall(target_location)
+        # extracting image now
+        try:
+            if tarfile.is_tarfile(image):
+                if debug:
+                    print('Image {} is a tarfile'.format(image))
+            else:
+                if debug:
+                    print('Image {} is NOT a tarfile'.format(image))
+
+            with tarfile.open(image,mode='r') as f:
+                if debug:
+                    print('Extracting {} in {}'.format(image,target_location))
+                f.extractall(target_location)
+        except:
+            print('Something bad happened during the extraction')
+            raise
 
     return target_location
 
@@ -155,9 +184,19 @@ def cleanup(location,tmp_file,rm_chroot,keep_tmp,debug):
 
     # cleaning chroot directory
     if rm_chroot:
-        if debug:
-            print('Cleaning chroot dir {}'.format(location))
-        shutil.rmtree(location)
+        try:
+            if os.stat(location):
+                if debug:
+                    print('Cleaning chroot dir {}'.format(location))
+                shutil.rmtree(location)
+        except FileNotFoundError:
+            if debug:
+                print('chroot directory {} not found'.format(location))
+            pass
+        except:
+            if debug:
+                print('Issues cleaning chroot directory {}'.format(location))
+            raise
 
     # cleaning temp file
     if not keep_tmp:
