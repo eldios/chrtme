@@ -31,7 +31,7 @@ chrtme - chroot me is a management tool for chroot enviroments.
         help='Force script execution, besides warnings (eg: not running script as root)')
 
     parser.add_argument('-t','--tmp', action='store', default='/tmp/rootfs.tmp',
-        help='Specify temp directory to be used during the image download. Default "/tmp/rootfs.tmp"')
+        help='Specify temp file location to save the downloaded image. Default "/tmp/rootfs.tmp"')
     parser.add_argument('-l','--location', action='store', default='./rootfs/',
         help='Specify the target directory to extract the downloaded image. Default "./rootfs/"')
     parser.add_argument('-r','--rm', action='store_true',
