@@ -30,8 +30,8 @@ chrtme - chroot me is a management tool for chroot enviroments.
     parser.add_argument('-f','--force', action='store_true',
         help='Force script execution, besides warnings (eg: not running script as root)')
 
-    parser.add_argument('-t','--tmp', action='store', default='/tmp/rootfs.tmp',
-        help='Specify temp file location to save the downloaded image. Default "/tmp/rootfs.tmp"')
+    parser.add_argument('-t','--tmp', action='store', default='/tmp/',
+        help='Specify temp directory location to save the downloaded image. Default "/tmp/"')
     parser.add_argument('-l','--location', action='store', default='./rootfs/',
         help='Specify the target directory to extract the downloaded image. Default "./rootfs/"')
     parser.add_argument('-r','--rm', action='store_true',
@@ -50,9 +50,12 @@ chrtme - chroot me is a management tool for chroot enviroments.
     if args.image:
         args.image = args.image[0]
 
-    # normalize path
+    # TODO: yikes.. please rewrite this chunk of code in a more reusable way
+    # normalize paths
     if (args.location):
         args.location = os.path.realpath(args.location)
+    if (args.tmp):
+        args.tmp = os.path.realpath(args.tmp)
 
     # print args for debugging purposes
     if ( args.debug ):
@@ -62,9 +65,21 @@ chrtme - chroot me is a management tool for chroot enviroments.
 
 
 # Download images in TMP directory or specified location
-def download(image,tmp_file,debug=False):
-    import os,urllib
+def download(image,tmp_dir,debug=False):
     """Download images in TMP directory or specified location"""
+    import os
+    import urllib.request
+    from urllib.parse import urlparse
+
+    url = urlparse(image)
+    filename = urlparse(image).path.split('/')[-1]
+    if debug:
+        print('Image filename parse to {}'.format(filename))
+
+    abs_path = os.path.join(tmp_dir,filename) 
+    if debug:
+        print('Image absolute path set to {}'.format(abs_path))
+
     try:
         if os.stat(image):
             if debug:
@@ -155,7 +170,12 @@ def cleanup(location,tmp_file,rm_chroot,keep_tmp,debug):
             os.remove(tmp_file)
         except FileNotFoundError:
             if debug:
-                print('tmp_file {} NOT found!'.format(tmp_file))
+                print('tmp file {} not found'.format(tmp_file))
+            pass
+        except:
+            if debug:
+                print('Found issues while cleaning {}'.format(tmp_file))
+            raise
 
 
 # Send signal to running chroot
@@ -165,7 +185,7 @@ def sendsignal():
 # main function defition, used when call from CLI
 def __main__():
     """main function defition, used when call from CLI"""
-    import sys
+    import sys,os
 
     # parse command line arguments
     args = parsecliargs()
@@ -182,7 +202,7 @@ def __main__():
 
     finally:
         # cleaning chroot directory and temp leftovers
-        cleanup(args.location,args.tmp,args.rm,args.keeptmp,args.debug)
+        cleanup(chroot_location,downloaded_image,args.rm,args.keeptmp,args.debug)
 
     sys.exit(0)
 
