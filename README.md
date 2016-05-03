@@ -50,6 +50,8 @@ optional arguments:
 
 ## History
 
+* 20160503 - 0.0.4 - Changed chroot cleaning behavior to support local existing files usage
+* 20160503 - 0.0.3 - Fixed issues with tmp files/dir handling
 * 20160502 - 0.0.2 - Added basic script functionality
 * 20160501 - 0.0.1 - Initial commit - basic script structure and help message
 
