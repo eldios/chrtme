@@ -223,7 +223,7 @@ def sendsignal():
 
 # main function defition, used when call from CLI
 def __main__():
-    """main function defition, used when call from CLI"""
+    """main function definition, used when call from CLI"""
     import sys,os
 
     # parse command line arguments
