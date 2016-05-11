@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-version = '0.0.2'
+version = '0.0.4'
 author = """
 Emanuele 'Lele' Calo'
 Email:<lele [at] quasinormale [dot] it>
