@@ -3,7 +3,7 @@ from distutils.core import setup
 def main():
     setup_args = dict(
         name = "chrtme",
-        packages = ["chrtme", "chrtme.tests"],
+        packages = ["chrtme"],
         version = "0.0.4",
         license='MIT',
         description = "chroot wrapper and management utility",
