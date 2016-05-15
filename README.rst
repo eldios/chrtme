@@ -21,11 +21,15 @@ Example usages
 CLI
 ===
 
-::
+Command line usage examples:
+
+..
     $ #TODO
 
 Python library
 ==============
+
+Some examples using chrtme as a Python Library:
 
 .. code-block:: python
 

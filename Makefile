@@ -2,8 +2,8 @@
 
 # You can set these variables from the command line.
 PYTHON    = python
-TSCRIPT   = tests/runner.py
-CMDSEP    = ";"
+TSCRIPT   = tests/test_chrtme.py
+CMDSEP    = ;
 
 .PHONY: all
 all: test

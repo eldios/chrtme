@@ -7,7 +7,7 @@ try:
 except ImportError:
     import mock  # requires "pip install mock"
 
-from chrtme import ChRtMe
+from chrtme import Chrtme
 
 class ChrtmeTestToolkit(unittest.TestCase):
     """Base class for all Chrtme tests."""
