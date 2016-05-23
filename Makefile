@@ -2,7 +2,7 @@
 
 # You can set these variables from the command line.
 PYTHON    = python
-TSCRIPT   = tests/test_chrtme.py
+TSCRIPT   = tests/test_chrtme.py tests/test_chrtmed.py 
 CMDSEP    = ;
 
 .PHONY: all

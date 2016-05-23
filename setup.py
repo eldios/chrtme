@@ -4,7 +4,7 @@ def main():
     setup_args = dict(
         name = "chrtme",
         packages = ["chrtme"],
-        version = "0.0.4",
+        version = "0.0.5",
         license='MIT',
         description = "chroot wrapper and management utility",
         author = "Emanuele Lele Calo'",
