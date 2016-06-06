@@ -1,7 +1,8 @@
 class Chrtme:
     """Base chrtme library class"""
 
-    def _validateURL(self,url):
+    @classmethod
+    def _validate_url(cls, url):
         """Validate URLs used to download images"""
         from urllib.parse import urlparse
         parsed_url = urlparse(url)
@@ -9,21 +10,22 @@ class Chrtme:
             'http', 'https',
             'file'
         ]
-        if ( 
-            not parsed_url.scheme or 
-            not parsed_url.scheme in allowed_schemes
+        if not (
+            parsed_url.scheme or
+            parsed_url.scheme in allowed_schemes
         ):
             raise ValueError("Invalid URL scheme: http, https and file only.")
         return parsed_url.geturl()
 
-    def _validateLocation(self,location):
+    @classmethod
+    def _validate_location(self, location):
         """Validate target chrootfs location"""
         import os
-        if not ( 
+        if not (
             os.path.exists(location) or
             os.path.exists( # location parent directory
                 os.path.abspath(
-                    os.path.join(location,os.path.pardir)
+                    os.path.join(location, os.path.pardir)
                 )
             )
         ):
@@ -32,7 +34,7 @@ class Chrtme:
     def __init__(self, url, cmd, location=None):
         # URL
         try:
-            self._url = self._validateURL(url)
+            self._url = self._validate_url(url)
         except:
             raise
 
@@ -42,9 +44,9 @@ class Chrtme:
         # Location
         if not location:
             import os
-            location = os.path.join(os.getcwd(),'chrootfs')
+            location = os.path.join(os.getcwd(), 'chrootfs')
 
         try:
-            self._location = self._validateLocation(location)
+            self._location = self._validate_location(location)
         except:
             raise
