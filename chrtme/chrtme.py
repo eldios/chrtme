@@ -18,7 +18,7 @@ class Chrtme:
         return parsed_url.geturl()
 
     @classmethod
-    def _validate_location(self, location):
+    def _validate_location(cls, location):
         """Validate target chrootfs location"""
         import os
         if not (
