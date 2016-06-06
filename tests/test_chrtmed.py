@@ -34,6 +34,6 @@ class ChrtmeDaemonTest(ChrtmeDaemonTestToolkit):
         except ImportError:
             self.fail('Importing chrtmed library failed')
         except:
-            self.fail('Unexpected failure during chrtmed import')
+            self.fail('Unexpected failure durinurg chrtmed import')
         
 
